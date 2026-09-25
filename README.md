@@ -2,7 +2,7 @@
 
 This repository contains a prospective Lean formalization of [JSP-000216](https://github.com/TheJustinSunPrize/awards/blob/main/problems/catalog-0201-0300.md#JSP-000216), corresponding to [Erdős Problem #245](https://www.erdosproblems.com/245). The mathematical result is due to G. A. Freiman (1973).
 
-The proof is **not complete**. No catalog pull request or award claim has been created. A successful build of a weaker statement or an example would not establish the original result.
+The proof is **not complete**. The public pull request records formalization progress only; it does not claim that the original result has been proved or that award eligibility has been established.
 
 ## Local progress (2026-09-26)
 
@@ -35,6 +35,13 @@ The core interface now also records the implication chain
 `DiscreteThreeExact → DiscreteThreeApprox → DiscreteTwo`; the second step is
 the `k = 1` specialization and is useful for checking the constant-2 variant.
 
+The `mathlib/` subproject contains two independently checked bridges. `BridgeExact.lean`
+connects the reciprocal-error `SetApprox` interface to the exact `EReal`
+`atTop.limsup` conclusion, including eventual denominator positivity. `FreimanProgression.lean`
+proves the finite diameter-to-progression covering lemma. The finite `3k−4`
+inverse theorem and its infinite zero-density transfer are still open in this
+repository.
+
 The latest core layer also proves that infinitude and zero density can be
 selected simultaneously at any sufficiently large cutoff, and that the
 positive counting function of `A + A` is unbounded along even cutoffs. These
@@ -61,6 +68,15 @@ toolchain, run:
 
 ```powershell
 lake build
+```
+
+The Mathlib verification layer can be checked separately after resolving its
+pinned Mathlib dependency:
+
+```powershell
+cd mathlib
+lake env lean BridgeExact.lean
+lake env lean FreimanProgression.lean
 ```
 
 This builds the `JSP000216` library target. With the bundled Lean executable,

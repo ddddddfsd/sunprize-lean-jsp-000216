@@ -1,7 +1,7 @@
 # JSP-000216 formalization submission record
 
 **Submission status:** progress record for public review. This document does not
-claim a complete solution, a catalog update, or award eligibility.
+claim a complete solution or award eligibility.
 
 ## Problem
 
@@ -47,9 +47,15 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 - a finite three-block construction yielding `3*n - 1` witnesses under an
   explicit gap hypothesis.
 
+The `mathlib/` subproject adds a checked `Set`/`Filter`/`EReal` bridge from the
+reciprocal-error interface to the exact limsup conclusion, together with the
+finite diameter-to-progression covering lemma. It does not include the finite
+Freiman `3k−4` inverse theorem or the infinite zero-density transfer.
+
 `DiscreteErdos245` is currently a definition, not a proved theorem. The
-analytic `Set`/`Filter`/`EReal` limsup statement and its equivalence with the
-discrete interface have not yet been formalized.
+Mathlib bridge for the reciprocal-error interface is checked in `mathlib/`,
+but the finite-to-infinite theorem that supplies its hypothesis has not yet
+been formalized.
 
 ## Reproduction
 
@@ -58,6 +64,9 @@ packages. From the repository root:
 
 ```powershell
 lake build
+cd mathlib
+lake env lean BridgeExact.lean
+lake env lean FreimanProgression.lean
 ```
 
 The build is expected to finish successfully for the current core layer.
@@ -82,7 +91,7 @@ The following items are required before this becomes an award submission:
    independently checkable proof dependency.
 2. Prove the infinite transfer from the finite structure to the zero-density
    limsup bound for every admissible `A`.
-3. Add the Mathlib bridge for interval cardinalities, real ratios, eventual
-   positivity of the denominator, and `EReal` limsup.
+3. Formalize the finite `3k−4` inverse theorem and the infinite transfer from
+   zero density to the reciprocal-error interface.
 4. Re-run the complete audit on the exact public commit and then prepare a
    catalog-only PR following the award repository's template.
