@@ -644,6 +644,58 @@ theorem threeBlock_countPos_sum_lower {A : NatSet} {x : Nat → Nat}
     have hs := threeBlockSum_mem_truncated hn hx hx_pos hx_le hstrict hgap hi
     exact hs.2.2
 
+/- A reusable witness package for the missing infinite transfer.  It records
+   exactly the finite hypotheses needed by the three-block construction and
+   the denominator control needed to turn `3*n - 1` sums into a reciprocal
+   approximation to 3. -/
+def ThreeBlockApproxWitness (A : NatSet) (k M : Nat) : Prop :=
+  ∃ n N : Nat, ∃ x : Nat → Nat,
+    2 ≤ n ∧ k ≤ n ∧ M ≤ x n + x (n - 1) ∧
+    (∀ i, i < n + 1 → A (x i) ∧ 0 < x i ∧ x i ≤ N) ∧
+    StrictlyIncreasingOn x (n + 1) ∧
+    2 * x (n - 1) < x n + x 0 ∧
+    countPos A (x n + x (n - 1)) ≤ n
+
+def GapSparseThreeApprox (A : NatSet) : Prop :=
+  ∀ k : Nat, 0 < k → ∀ M : Nat, ThreeBlockApproxWitness A k M
+
+theorem gapSparseThreeApprox_implies_discreteThreeApprox {A : NatSet}
+    (hA : GapSparseThreeApprox A) : DiscreteThreeApprox A := by
+  intro k hk M
+  obtain ⟨n, N, x, hn, hkn, hM, hx, hstrict, hgap, hcount⟩ := hA k hk M
+  let T := x n + x (n - 1)
+  have hx_mem : ∀ i, i < n + 1 → A (x i) := by
+    intro i hi
+    exact (hx i hi).1
+  have hx_pos : ∀ i, i < n + 1 → 0 < x i := by
+    intro i hi
+    exact (hx i hi).2.1
+  have hx_le : ∀ i, i < n + 1 → x i ≤ N := by
+    intro i hi
+    exact (hx i hi).2.2
+  have hsum : 3 * n - 1 ≤ countPos (SumSet A) T := by
+    simpa [T] using threeBlock_countPos_sum_lower hn hx_mem hx_pos hx_le hstrict hgap
+  let a := countPos A T
+  let b := countPos (SumSet A) T
+  have hcoef : (3 * k - 1) * n ≤ k * (3 * n - 1) := by
+    calc
+      (3 * k - 1) * n = 3 * (k * n) - n := by
+        rw [Nat.sub_mul]
+        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      _ ≤ 3 * (k * n) - k := Nat.sub_le_sub_left hkn _
+      _ = k * (3 * n - 1) := by
+        rw [Nat.mul_sub_left_distrib]
+        simp [Nat.mul_assoc, Nat.mul_comm]
+  have hleft : (3 * k - 1) * a ≤ (3 * k - 1) * n :=
+    Nat.mul_le_mul_left (3 * k - 1) hcount
+  have hmiddle : (3 * k - 1) * n ≤ k * (3 * n - 1) := hcoef
+  have hright : k * (3 * n - 1) ≤ k * b :=
+    Nat.mul_le_mul_left k hsum
+  have hab : (3 * k - 1) * a ≤ k * b :=
+    Nat.le_trans hleft (Nat.le_trans hmiddle hright)
+  refine ⟨T, hM, ?_⟩
+  simpa [a, b, T] using hab
+
 theorem boundarySum_injective {x : Nat → Nat} {n : Nat}
     (hn : 2 ≤ n) (hstrict : StrictlyIncreasingOn x n) :
     InjectiveBelow (boundarySum x n) (2 * n - 1) := by

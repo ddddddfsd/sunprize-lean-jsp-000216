@@ -41,6 +41,12 @@ positive counting function of `A + A` is unbounded along even cutoffs. These
 are elementary prerequisites for a later density-transfer proof; they do not
 replace Freiman's structural argument.
 
+It also packages the remaining finite mechanism as `GapSparseThreeApprox`:
+if arbitrarily large cutoffs admit a strictly increasing block with the
+three-block gap and a controlled denominator, the file derives
+`DiscreteThreeApprox`. The existence of those blocks for every zero-density
+set is still the unresolved transfer theorem.
+
 The current mathematical gap and the finite `3k−4` structural route are
 recorded in [`ANALYSIS-216.md`](ANALYSIS-216.md).
 
