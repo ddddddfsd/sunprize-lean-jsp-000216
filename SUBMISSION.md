@@ -35,6 +35,7 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 `JSP000216`. It defines:
 
 - `NatSet`, `Infinite`, `SumSet`, `countPos`, and `ZeroDensity`;
+- set-inclusion monotonicity for `countPos` and `ZeroDensity`;
 - the discrete approximation interface `DiscreteThreeApprox`;
 - monotonicity of `DiscreteThreeApprox` in its reciprocal-error parameter;
 - the catalogue-shaped target interface `DiscreteErdos245`;

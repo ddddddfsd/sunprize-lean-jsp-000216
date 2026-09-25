@@ -64,6 +64,37 @@ theorem countPos_mono (A : NatSet) : ∀ {m n : Nat}, m ≤ n →
       simp only [countPos]
       omega
 
+/- Enlarging the underlying set can only increase the interval count.  This
+   is the counting-set analogue of `countPos_mono` and is useful when a
+   finite structural argument is applied to a subset of the original set. -/
+theorem countPos_mono_left {A B : NatSet}
+    (hAB : ∀ n, A n → B n) :
+    ∀ N : Nat, countPos A N ≤ countPos B N := by
+  intro N
+  induction N with
+  | zero => exact Nat.le_refl _
+  | succ n ih =>
+      by_cases ha : A (n + 1)
+      · have hb : B (n + 1) := hAB (n + 1) ha
+        simp [countPos, ha, hb]
+        omega
+      · by_cases hb : B (n + 1)
+        · simp [countPos, ha, hb]
+          omega
+        · simp [countPos, ha, hb]
+          exact ih
+
+theorem zeroDensity_mono {A B : NatSet}
+    (hAB : ∀ n, A n → B n) (hB : ZeroDensity B) :
+    ZeroDensity A := by
+  intro k hk
+  obtain ⟨N, hN⟩ := hB k hk
+  refine ⟨N, ?_⟩
+  intro n hn
+  exact Nat.le_trans
+    (Nat.mul_le_mul_left k (countPos_mono_left hAB n))
+    (hN n hn)
+
 theorem countPos_add_one_of_mem {A : NatSet} {m n : Nat}
     (hmn : m < n) (hn : A n) (hn_pos : 0 < n) :
     countPos A m + 1 ≤ countPos A n := by
