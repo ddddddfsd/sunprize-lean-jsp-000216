@@ -51,7 +51,7 @@ This builds the `JSP000216` library target. With the bundled Lean executable,
 the source can also be checked directly:
 
 ```powershell
-$lean = 'C:\Users\Windows User\Documents\Codex\2026-09-25\https-github-com-thejustinsunprize-awards-tree\work\lean-toolchain\lean-4.33.0-windows\bin\lean.exe'
+$lean = 'C:\path\to\lean-4.33.0\bin\lean.exe'
 & $lean D:\Users\WindowsUser\Desktop\SunPrize-Lean\JSP000216.lean
 ```
 
