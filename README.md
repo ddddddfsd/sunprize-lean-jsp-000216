@@ -42,6 +42,12 @@ proves the finite diameter-to-progression covering lemma. The finite `3k−4`
 inverse theorem and its infinite zero-density transfer are still open in this
 repository.
 
+The same Mathlib file now checks the primitive diameter consequence used by a
+potential transfer: if a positive-step progression covers a finite set whose
+differences have no nontrivial common positive divisor, the step is forced to
+be 1, and the cover length is at least the endpoint diameter. This consequence
+does not replace Freiman's structural theorem.
+
 The latest core layer also proves that infinitude and zero density can be
 selected simultaneously at any sufficiently large cutoff, and that the
 positive counting function of `A + A` is unbounded along even cutoffs. These

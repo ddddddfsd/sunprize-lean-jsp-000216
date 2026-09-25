@@ -7,7 +7,9 @@ core JSP-000216 development to the exact Formal Conjectures statement.
   the exact `EReal` `atTop.limsup` lower bound, including eventual denominator
   positivity and the real-index transport.
 - `FreimanProgression.lean` proves the finite diameter-to-unit-progression
-  covering lemma for finite integer sets.
+  covering lemma for finite integer sets. It also proves that a positive-step
+  cover of a primitive finite set must have unit step, hence its length is at
+  least the endpoint diameter.
 
 Both files are free of `sorry`, `admit`, and custom axioms. These files do not
 claim the missing finite Freiman `3k-4` inverse theorem or its infinite

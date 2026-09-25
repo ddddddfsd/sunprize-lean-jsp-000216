@@ -51,6 +51,9 @@ The `mathlib/` subproject adds a checked `Set`/`Filter`/`EReal` bridge from the
 reciprocal-error interface to the exact limsup conclusion, together with the
 finite diameter-to-progression covering lemma. It does not include the finite
 Freiman `3k−4` inverse theorem or the infinite zero-density transfer.
+It also checks the primitive consequence that any positive-step cover of a
+finite set with trivial common difference divisor has unit step and therefore
+length at least the endpoint diameter.
 
 `DiscreteErdos245` is currently a definition, not a proved theorem. The
 Mathlib bridge for the reciprocal-error interface is checked in `mathlib/`,
