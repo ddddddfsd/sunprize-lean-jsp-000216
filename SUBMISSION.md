@@ -40,6 +40,9 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 - monotonicity of `DiscreteThreeApprox` in its reciprocal-error parameter;
 - simultaneous large sparse cutoffs from `Infinite` plus `ZeroDensity`;
 - unbounded positive counting of the sumset along even cutoffs;
+- value-unbounded positive truncation counts for every infinite set;
+- a zero-density contradiction for any recurrent linear endpoint bound
+  `N ≤ C * countPos A N + D`;
 - the `GapSparseThreeApprox` witness interface and its implication to
   `DiscreteThreeApprox`;
 - the catalogue-shaped target interface `DiscreteErdos245`;
@@ -54,6 +57,12 @@ Freiman `3k−4` inverse theorem or the infinite zero-density transfer.
 It also checks the primitive consequence that any positive-step cover of a
 finite set with trivial common difference divisor has unit step and therefore
 length at least the endpoint diameter.
+
+The same subproject now proves the endpoint lower bound
+`2 * F.card - 1 ≤ (F + F).card` for nonempty finite integer sets, and an
+integer small-doubling bound: if the doubling is at most `2 - ε` with
+`0 < ε ≤ 1`, then `F.card ≤ 2 / ε - 1`. These are verified finite-side
+lemmas; they do not supply the missing `3k−4` inverse theorem.
 
 `DiscreteErdos245` is currently a definition, not a proved theorem. The
 Mathlib bridge for the reciprocal-error interface is checked in `mathlib/`,
@@ -70,6 +79,7 @@ lake build
 cd mathlib
 lake env lean BridgeExact.lean
 lake env lean FreimanProgression.lean
+lake env lean IntegerSmallDoubling.lean
 ```
 
 The build is expected to finish successfully for the current core layer.

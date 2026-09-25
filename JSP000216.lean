@@ -420,6 +420,62 @@ theorem infinite_has_increasing_witness {A : NatSet} (hA : Infinite A) :
       · intro i j hi hj hij
         exact hstrict (by omega) (by omega) hij
 
+/- Infinitude makes the positive truncation count unbounded in value, not just
+   eventually positive.  This is the count form used by density-transfer
+   contradictions. -/
+theorem countPos_value_unbounded {A : NatSet} (hA : Infinite A) :
+    ∀ K : Nat, ∃ N : Nat, K ≤ countPos A N := by
+  intro K
+  cases K with
+  | zero =>
+      exact ⟨0, by omega⟩
+  | succ k =>
+      obtain ⟨x, hx, hpos, hstrict⟩ := infinite_has_increasing_witness hA (k + 1)
+      let N := x k
+      have hbound : ∀ i, i < k + 1 → x i ≤ N := by
+        intro i hi
+        by_cases heq : i = k
+        · simp [N, heq]
+        · have hilt : i < k := by omega
+          have hlt := hstrict (by omega) (by omega) hilt
+          simp [N]
+          omega
+      have hc := countPos_ge_of_strict
+        (A := A) (f := x) (m := k + 1) (N := N)
+        (by
+          intro i hi
+          exact ⟨hx i (by omega), hpos i (by omega)⟩)
+        (by
+          intro i j hi hj hij
+          exact hstrict (by omega) (by omega) hij)
+        hbound
+      refine ⟨N, ?_⟩
+      exact hc
+
+/- A recurrent linear upper bound on the endpoint in terms of the positive
+   counting function is incompatible with infinitude and natural zero density.
+   This is the elementary infinite-transfer half of the Freiman route: once a
+   finite structural argument yields `N ≤ C * A_N + D` at arbitrarily large
+   cutoffs, zero density is contradicted. -/
+theorem zeroDensity_not_recurrent_linear_bound {A : NatSet}
+    (hA : Infinite A) (hD : ZeroDensity A) {C D : Nat}
+    (hbound : ∀ M : Nat, ∃ N : Nat,
+      M ≤ N ∧ N ≤ C * countPos A N + D) : False := by
+  obtain ⟨N₀, hN₀⟩ := hD (C + 1) (by omega)
+  obtain ⟨N₁, hN₁⟩ := countPos_value_unbounded hA (D + 1)
+  let M := max N₀ N₁
+  obtain ⟨N, hMN, hlin⟩ := hbound M
+  have hN0 : N₀ ≤ N := Nat.le_trans (Nat.le_max_left _ _) hMN
+  have hN1 : N₁ ≤ N := Nat.le_trans (Nat.le_max_right _ _) hMN
+  have hsmall := hN₀ N hN0
+  have hcountN : D + 1 ≤ countPos A N :=
+    Nat.le_trans hN₁ (countPos_mono A hN1)
+  have hineq : (C + 1) * countPos A N ≤ C * countPos A N + D :=
+    Nat.le_trans hsmall hlin
+  have hineq' : C * countPos A N + countPos A N ≤ C * countPos A N + D := by
+    simpa [Nat.add_mul] using hineq
+  omega
+
 /- The standard “two boundary chains” of sums: first `x 0 + x k`, then
    `x (k-n+1) + x (n-1)`.  The two chains are separated by the middle gap. -/
 def boundarySum (x : Nat → Nat) (n k : Nat) : Nat :=

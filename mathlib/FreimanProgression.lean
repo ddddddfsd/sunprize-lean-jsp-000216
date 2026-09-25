@@ -1,6 +1,7 @@
 import Mathlib
 
 open Set Finset
+open scoped Pointwise
 
 namespace FreimanProgression
 
@@ -126,10 +127,81 @@ lemma primitive_diameter_le_cover_length
     exact_mod_cast hle'
   exact hnat.trans hn
 
+/-- Endpoint translates give the standard `2 * |F| - 1` lower bound
+for the self-sumset of a nonempty finite integer set. -/
+theorem card_add_self_ge_two_card_sub_one
+    (F : Finset ℤ) (hF : F.Nonempty) :
+    2 * F.card - 1 ≤ (F + F).card := by
+  let lo : ℤ := F.min' hF
+  let hi : ℤ := F.max' hF
+  let L : Finset ℤ := F.image (fun x => lo + x)
+  let R : Finset ℤ := F.image (fun x => hi + x)
+  have hlo : lo ∈ F := by
+    exact F.min'_mem hF
+  have hhi : hi ∈ F := by
+    exact F.max'_mem hF
+  have hLcard : L.card = F.card := by
+    dsimp [L]
+    apply Finset.card_image_of_injective
+    intro x y hxy
+    exact add_left_cancel hxy
+  have hRcard : R.card = F.card := by
+    dsimp [R]
+    apply Finset.card_image_of_injective
+    intro x y hxy
+    exact add_left_cancel hxy
+  have hLsub : L ⊆ F + F := by
+    intro z hz
+    rcases Finset.mem_image.mp hz with ⟨x, hx, rfl⟩
+    exact Finset.mem_add.mpr ⟨lo, hlo, x, hx, rfl⟩
+  have hRsub : R ⊆ F + F := by
+    intro z hz
+    rcases Finset.mem_image.mp hz with ⟨x, hx, rfl⟩
+    exact Finset.mem_add.mpr ⟨hi, hhi, x, hx, rfl⟩
+  have hUnionSub : L ∪ R ⊆ F + F := union_subset hLsub hRsub
+  have hInter : L ∩ R = {lo + hi} := by
+    apply Finset.Subset.antisymm
+    · intro z hz
+      rcases Finset.mem_inter.mp hz with ⟨hzL, hzR⟩
+      rcases Finset.mem_image.mp hzL with ⟨x, hx, hxz⟩
+      rcases Finset.mem_image.mp hzR with ⟨y, hy, hyz⟩
+      have hxhi : x ≤ hi := by
+        exact F.le_max' x hx
+      have hloy : lo ≤ y := by
+        exact F.min'_le y hy
+      have hle : z ≤ lo + hi := by
+        rw [← hxz]
+        omega
+      have hge : lo + hi ≤ z := by
+        rw [← hyz]
+        omega
+      have hz' : z = lo + hi := le_antisymm hle hge
+      simpa [hz']
+    · intro z hz
+      have hz' : z = lo + hi := by simpa using hz
+      subst z
+      apply Finset.mem_inter.mpr
+      constructor
+      · apply Finset.mem_image.mpr
+        exact ⟨hi, hhi, rfl⟩
+      · apply Finset.mem_image.mpr
+        refine ⟨lo, hlo, ?_⟩
+        ring
+  have hUnionCard : (L ∪ R).card = 2 * F.card - 1 := by
+    have hcard := Finset.card_union_add_card_inter L R
+    rw [hLcard, hRcard, hInter] at hcard
+    simp only [Finset.card_singleton] at hcard
+    omega
+  have hCardLe : (L ∪ R).card ≤ (F + F).card :=
+    Finset.card_le_card hUnionSub
+  rw [hUnionCard] at hCardLe
+  exact hCardLe
+
 end FreimanProgression
 
 #print axioms FreimanProgression.finset_progression_cover_of_diameter
 #print axioms FreimanProgression.finite_set_progression_cover_of_diameter
 #print axioms FreimanProgression.progression_step_eq_one_of_primitive
 #print axioms FreimanProgression.primitive_diameter_le_cover_length
+#print axioms FreimanProgression.card_add_self_ge_two_card_sub_one
 
