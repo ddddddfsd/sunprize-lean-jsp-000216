@@ -148,6 +148,27 @@ theorem countPos_eventually_pos {A : NatSet} (hA : Infinite A) :
   intro n hn
   exact countPos_pos_of_mem ha ha_gt hn
 
+/- Zero density and infinitude can be made simultaneous at an arbitrary
+   large cutoff.  This is the elementary selection principle needed when a
+   later additive-combinatorial argument compares a positive denominator with
+   a prescribed reciprocal error. -/
+theorem zeroDensity_has_large_sparse_cutoff {A : NatSet}
+    (hA : Infinite A) (hD : ZeroDensity A) :
+    ∀ k : Nat, 0 < k → ∀ M : Nat, ∃ N : Nat,
+      M ≤ N ∧ 0 < countPos A N ∧ k * countPos A N ≤ N := by
+  intro k hk M
+  obtain ⟨Nd, hNd⟩ := hD k hk
+  obtain ⟨Np, hNp⟩ := countPos_eventually_pos hA
+  let N := max M (max Nd Np)
+  refine ⟨N, ?_, ?_, ?_⟩
+  · exact Nat.le_max_left _ _
+  · apply hNp N
+    exact Nat.le_trans (Nat.le_max_right Nd Np)
+      (Nat.le_max_right M (max Nd Np))
+  · apply hNd N
+    exact Nat.le_trans (Nat.le_max_left Nd Np)
+      (Nat.le_max_right M (max Nd Np))
+
 /- Every sumset element has an explicit pair of witnesses.  This converse is
    useful when a future finite-cardinality development introduces a truncated
    sumset. -/
@@ -761,6 +782,23 @@ theorem infinite_has_countPos_sum_lower {A : NatSet} (hA : Infinite A)
     have hlt := hstrict (by omega) (by omega : n - 1 < n) hilt
     simp [N]
     omega
+
+/- The preceding finite-boundary argument can be iterated at arbitrary
+   lengths.  In particular, the positive counting function of the sumset is
+   unbounded along the even cutoffs.  This is a useful closed interface for
+   later density arguments: it uses only infinitude and does not smuggle in
+   the missing Freiman structural theorem. -/
+theorem sumSet_countPos_unbounded {A : NatSet} (hA : Infinite A) :
+    ∀ K : Nat, ∃ N : Nat, K ≤ countPos (SumSet A) (2 * N) := by
+  intro K
+  let n := (K + 1) / 2 + 2
+  have hn : 2 ≤ n := by
+    dsimp [n]
+    omega
+  obtain ⟨N, hN⟩ := infinite_has_countPos_sum_lower hA hn
+  refine ⟨N, ?_⟩
+  dsimp [n] at hN ⊢
+  omega
 
 theorem hasDistinctWitnesses_mono {S T : NatSet} {m : Nat}
     (hST : ∀ s, S s → T s) (hS : HasDistinctWitnesses S m) :
