@@ -4,7 +4,7 @@ This repository contains a prospective Lean formalization of [JSP-000216](https:
 
 The proof is **not complete**. No catalog pull request or award claim has been created. A successful build of a weaker statement or an example would not establish the original result.
 
-## Local progress (2026-09-25)
+## Local progress (2026-09-26)
 
 [`JSP000216.lean`](JSP000216.lean) is a dependency-free Lean 4.33.0 core
 layer. It defines unbounded subsets of `ℕ`, their additive sumsets, positive
@@ -34,6 +34,12 @@ a weaker theorem with the same name.
 The core interface now also records the implication chain
 `DiscreteThreeExact → DiscreteThreeApprox → DiscreteTwo`; the second step is
 the `k = 1` specialization and is useful for checking the constant-2 variant.
+
+The latest core layer also proves that infinitude and zero density can be
+selected simultaneously at any sufficiently large cutoff, and that the
+positive counting function of `A + A` is unbounded along even cutoffs. These
+are elementary prerequisites for a later density-transfer proof; they do not
+replace Freiman's structural argument.
 
 The current mathematical gap and the finite `3k−4` structural route are
 recorded in [`ANALYSIS-216.md`](ANALYSIS-216.md).
