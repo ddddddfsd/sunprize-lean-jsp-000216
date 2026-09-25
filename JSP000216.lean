@@ -152,6 +152,33 @@ def DiscreteThreeApprox (A : NatSet) : Prop :=
   ∀ k : Nat, 0 < k → ∀ M : Nat, ∃ N : Nat, M ≤ N ∧
     (3 * k - 1) * countPos A N ≤ k * countPos (SumSet A) N
 
+/- The corresponding constant-2 statement is a useful consequence of the
+   approximation interface: take the reciprocal error parameter `k = 1`. -/
+def DiscreteTwo (A : NatSet) : Prop :=
+  ∀ M : Nat, ∃ N : Nat, M ≤ N ∧
+    2 * countPos A N ≤ countPos (SumSet A) N
+
+theorem discreteThreeExact_implies_approx {A : NatSet}
+    (hA : DiscreteThreeExact A) : DiscreteThreeApprox A := by
+  intro k hk M
+  obtain ⟨N, hMN, hN⟩ := hA M
+  refine ⟨N, hMN, ?_⟩
+  have hnonneg : 0 ≤ countPos A N := Nat.zero_le _
+  have hcoef : 3 * k - 1 ≤ 3 * k := by omega
+  have hscale : (3 * k) * countPos A N ≤ k * countPos (SumSet A) N := by
+    calc
+      (3 * k) * countPos A N = k * (3 * countPos A N) := by
+        simp [Nat.mul_left_comm, Nat.mul_comm]
+      _ ≤ k * countPos (SumSet A) N := Nat.mul_le_mul_left k hN
+  exact Nat.le_trans (Nat.mul_le_mul_right (countPos A N) hcoef) hscale
+
+theorem discreteThreeApprox_implies_two {A : NatSet}
+    (hA : DiscreteThreeApprox A) : DiscreteTwo A := by
+  intro M
+  obtain ⟨N, hMN, hN⟩ := hA 1 (by omega) M
+  refine ⟨N, hMN, ?_⟩
+  simpa using hN
+
 def DiscreteErdos245 : Prop :=
   ∀ A : NatSet, Infinite A → ZeroDensity A → DiscreteThreeApprox A
 

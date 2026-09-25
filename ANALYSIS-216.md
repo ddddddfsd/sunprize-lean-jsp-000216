@@ -17,6 +17,19 @@ B_N = |(A+A) ∩ [1,N]|.
 limsup B_N / A_N ≥ 3.
 ```
 
+Formal Conjectures 的精确声明（`FormalConjectures/ErdosProblems/245.lean`）是：
+
+```lean
+∀ (A : Set ℕ), A.Infinite →
+  atTop.Tendsto (fun N ↦ (A ∩ Icc 1 ⌊N⌋₊ |>.ncard : ℝ) / N) (𝓝 0) →
+  3 ≤ atTop.limsup
+    (fun N : ℝ ↦ ((A + A) ∩ Icc 1 ⌊N⌋₊ |>.ncard : EReal)
+      / (A ∩ Icc 1 ⌊N⌋₊).ncard)
+```
+
+该文件目前仍以 `sorry` 占位。主工程没有把这个占位声明复制成一个
+伪证明；`JSP000216.lean` 只保留不依赖 Mathlib 的自然数接口。
+
 Erdős 问题 [#245](https://www.erdosproblems.com/245) 页面明确记载：常数 2 的版本来自 Mann 的结果，常数 3 的肯定解归于 Freiman [Fr73]，页面没有给出证明展览。JSP-000216 是奖项目录编号，不能把它误读为 Erdős 问题 #216。Formal Conjectures 的对应 Lean 声明在 [`FormalConjectures/ErdosProblems/245.lean`](https://github.com/google-deepmind/formal-conjectures/blob/main/FormalConjectures/ErdosProblems/245.lean)，目前也是 `sorry` 占位。
 
 当前核心文件中的 `DiscreteThreeExact` 要求无穷多个 `N` 满足
@@ -27,6 +40,10 @@ Erdős 问题 [#245](https://www.erdosproblems.com/245) 页面明确记载：常
 ```
 
 这对应误差 `1/k`，是后续连接 EReal limsup 的正确离散接口；仍需在 Mathlib 层处理“分母最终为正”和自然数索引到实数索引的等价性。
+
+核心层现在还证明了接口层级：`DiscreteThreeExact` 蕴含
+`DiscreteThreeApprox`，而后者取 `k = 1` 蕴含常数 2 的离散陈述
+`DiscreteTwo`。这只是离散接口之间的逻辑关系，不是对 Freiman 定理的替代。
 
 ## 已完成的有限层
 
@@ -106,5 +123,15 @@ F_N + F_N ⊆ (A+A) ∩ [1,2N].
 3. 形式化有限 `3k−4` 结构定理的 Lean 版本，或明确记录一个可独立审查的完整证明依赖；不能把 Isabelle 定理当成 Lean 已证明定理。
 4. 单独证明 Freiman 的无限转移引理：零密度与“所有充分大截断的比值 `< 3−ε`”不相容。
 5. 最后证明离散误差接口与 Formal Conjectures 中 EReal limsup 的双向蕴含，并审计完整依赖闭包。
+
+## 依赖边界记录
+
+在本地忽略目录中已经核对过 Mathlib 所需的主要接口：
+`Set.ncard`（`Mathlib.Data.Set.Card`）、`ncard_Icc_nat`
+（`Mathlib.Order.Interval.Set.Nat`）、`EReal`（`Mathlib.Data.EReal.Basic`）
+以及 `Filter.limsup`（`Mathlib.Order.LiminfLimsup`）。这些接口足以表达
+目录中的目标类型，但不能提供 Freiman 的无限转移证明。由于主工程当前
+刻意保持 Lean 4.33.0、无外部包依赖的可复现构建，Mathlib 试验没有被写入
+`lakefile.toml`，也没有把 Formal Conjectures 的 `sorry` 作为依赖提交。
 
 在第 4 步完成以前，项目只能称为有限层和接口层进展，不能称为 JSP-000216 的完整证明。

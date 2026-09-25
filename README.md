@@ -31,6 +31,10 @@ infinitely many cutoffs would be stronger than a real limsup statement. The
 catalogue theorem is intentionally not represented by `sorry`, an `axiom`, or
 a weaker theorem with the same name.
 
+The core interface now also records the implication chain
+`DiscreteThreeExact → DiscreteThreeApprox → DiscreteTwo`; the second step is
+the `k = 1` specialization and is useful for checking the constant-2 variant.
+
 The current mathematical gap and the finite `3k−4` structural route are
 recorded in [`ANALYSIS-216.md`](ANALYSIS-216.md).
 
