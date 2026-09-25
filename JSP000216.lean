@@ -179,6 +179,53 @@ theorem discreteThreeApprox_implies_two {A : NatSet}
   refine ⟨N, hMN, ?_⟩
   simpa using hN
 
+/- The approximation interface is monotone in its reciprocal error parameter:
+   a witness for `k` also witnesses every positive `j ≤ k`.  This is useful
+   when a later analytic bridge chooses a convenient error scale.  The proof
+   keeps all products in `Nat`; the key coefficient inequality is obtained by
+   subtracting the ordered constants `j ≤ k` from the common term `3 * j * k`.
+   No real-valued or limit assumption is used here. -/
+theorem discreteThreeApprox_mono {A : NatSet}
+    (hA : DiscreteThreeApprox A) {j k : Nat}
+    (hj : 0 < j) (hjk : j ≤ k) :
+    ∀ M : Nat, ∃ N : Nat, M ≤ N ∧
+      (3 * j - 1) * countPos A N ≤ j * countPos (SumSet A) N := by
+  intro M
+  obtain ⟨N, hMN, hN⟩ := hA k (by omega) M
+  refine ⟨N, hMN, ?_⟩
+  let a := countPos A N
+  let b := countPos (SumSet A) N
+  have hcoef : k * (3 * j - 1) ≤ j * (3 * k - 1) := by
+    have hsub : 3 * (k * j) - k ≤ 3 * (k * j) - j :=
+      Nat.sub_le_sub_left hjk (3 * (k * j))
+    calc
+      k * (3 * j - 1) = 3 * (k * j) - k := by
+        rw [Nat.mul_sub_left_distrib]
+        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+      _ ≤ 3 * (k * j) - j := hsub
+      _ = j * (3 * k - 1) := by
+        rw [Nat.mul_sub_left_distrib]
+        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+  have hscaled :
+      (k * (3 * j - 1)) * a ≤ (j * (3 * k - 1)) * a :=
+    Nat.mul_le_mul_right a hcoef
+  have hscaled' :
+      (j * (3 * k - 1)) * a ≤ (j * k) * b := by
+    calc
+      (j * (3 * k - 1)) * a = j * ((3 * k - 1) * a) := by
+        simp [Nat.mul_assoc]
+      _ ≤ j * (k * b) := Nat.mul_le_mul_left j hN
+      _ = (j * k) * b := by simp [Nat.mul_assoc]
+  have hcombine :
+      (k * (3 * j - 1)) * a ≤ (j * k) * b :=
+    Nat.le_trans hscaled hscaled'
+  have hcombine' :
+      k * ((3 * j - 1) * a) ≤ k * (j * b) := by
+    simpa [Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using hcombine
+  have hresult : (3 * j - 1) * a ≤ j * b :=
+    Nat.le_of_mul_le_mul_left hcombine' (by omega)
+  simpa [a, b] using hresult
+
 def DiscreteErdos245 : Prop :=
   ∀ A : NatSet, Infinite A → ZeroDensity A → DiscreteThreeApprox A
 
