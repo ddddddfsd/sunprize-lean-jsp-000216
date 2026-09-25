@@ -44,7 +44,6 @@ lemma primitive_cover_span_bound_int
       ((F.max' hF - F.min' hF + 1).toNat : ℤ) ≤
         ((F + F).card - F.card + 1 : ℤ) := by
     exact_mod_cast hdiam
-  norm_num [Nat.cast_add, Nat.cast_sub hcardle] at hcast0
   have hcast :
       ((F.max' hF - F.min' hF + 1).toNat : ℤ) ≤
       ((F + F).card : ℤ) - (F.card : ℤ) + 1 := hcast0
