@@ -59,6 +59,5 @@ The initial submission consists of the Lean source, the analysis note, this
 README, the Lake configuration and the pinned toolchain file. Local handoff
 notes, scratch work and build products are excluded from Git by `.gitignore`.
 Before any public push, review the complete diff, dependency chain, provenance
-and verification evidence. Any public attribution must distinguish the
-historical mathematical solution, actual formalization contributions and AI
-assistance truthfully.
+and verification evidence. Any public attribution should distinguish the
+historical mathematical solution from the formalization contributions.
