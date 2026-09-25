@@ -1,8 +1,8 @@
 # JSP-000216: Lean formalization workbench
 
-This local repository is reserved for a prospective complete Lean formalization of [JSP-000216](https://github.com/TheJustinSunPrize/awards/blob/main/problems/catalog-0201-0300.md#JSP-000216), corresponding to [Erdős Problem #245](https://www.erdosproblems.com/245). The mathematical result is due to G. A. Freiman (1973).
+This repository contains a prospective Lean formalization of [JSP-000216](https://github.com/TheJustinSunPrize/awards/blob/main/problems/catalog-0201-0300.md#JSP-000216), corresponding to [Erdős Problem #245](https://www.erdosproblems.com/245). The mathematical result is due to G. A. Freiman (1973).
 
-The proof is **not complete**. No public proof repository, catalog pull request, or award claim has been created. A successful build of a weaker statement or an example would not establish the original result.
+The proof is **not complete**. No catalog pull request or award claim has been created. A successful build of a weaker statement or an example would not establish the original result.
 
 ## Local progress (2026-09-25)
 
