@@ -236,7 +236,7 @@ theorem discreteThreeApprox_mono {A : NatSet}
       _ ≤ 3 * (k * j) - j := hsub
       _ = j * (3 * k - 1) := by
         rw [Nat.mul_sub_left_distrib]
-        simp [Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm]
+        simp [Nat.mul_assoc, Nat.mul_comm]
   have hscaled :
       (k * (3 * j - 1)) * a ≤ (j * (3 * k - 1)) * a :=
     Nat.mul_le_mul_right a hcoef
