@@ -1,0 +1,12 @@
+# Private local handoff and research notes: never publish in the proof repository.
+HANDOFF-LOCAL.md
+
+# The declined JSP-000301 example is local only, not part of this submission.
+JSP-000301.lean
+
+# Local build products and scratch work.
+.lake/
+work/
+verification-local/
+*.olean
+*.ilean

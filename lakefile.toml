@@ -1,0 +1,6 @@
+name = "sunprize_lean"
+version = "0.1.0"
+defaultTargets = ["JSP000216"]
+
+[[lean_lib]]
+name = "JSP000216"
