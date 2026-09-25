@@ -38,6 +38,10 @@ the `k = 1` specialization and is useful for checking the constant-2 variant.
 The current mathematical gap and the finite `3k−4` structural route are
 recorded in [`ANALYSIS-216.md`](ANALYSIS-216.md).
 
+The public submission metadata and the exact remaining gates are recorded in
+[`SUBMISSION.md`](SUBMISSION.md). It is a progress record, not a claim that
+the catalogued theorem has already been proved.
+
 ## Reproducible build
 
 The repository is a small Lake library project. With the pinned Lean 4.33.0
