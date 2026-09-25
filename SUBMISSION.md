@@ -36,6 +36,7 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 
 - `NatSet`, `Infinite`, `SumSet`, `countPos`, and `ZeroDensity`;
 - the discrete approximation interface `DiscreteThreeApprox`;
+- monotonicity of `DiscreteThreeApprox` in its reciprocal-error parameter;
 - the catalogue-shaped target interface `DiscreteErdos245`;
 - finite witness and counting lemmas for `2*n - 1` sums; and
 - a finite three-block construction yielding `3*n - 1` witnesses under an
