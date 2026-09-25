@@ -70,7 +70,9 @@ The current core layer contains no `sorry`, `admit`, or custom axioms. It is a
 finite/interface layer and does not establish the original theorem. A final
 catalog submission will require a clean build at a fixed commit, a complete
 statement-to-proof correspondence, and an axiom audit for the fully qualified
-target theorem.
+target theorem. The newly added core lemmas were audited with `#print axioms`;
+their dependency set is the standard Lean kernel set
+`[propext, Classical.choice, Quot.sound]` and contains no `sorryAx`.
 
 ## Outstanding work
 
