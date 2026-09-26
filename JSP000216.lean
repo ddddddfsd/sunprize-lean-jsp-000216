@@ -476,6 +476,20 @@ theorem zeroDensity_not_recurrent_linear_bound {A : NatSet}
     simpa [Nat.add_mul] using hineq
   omega
 
+/- A finite structural argument often returns its endpoint as an actual
+   element of the set (for example, the maximum of a normalized progression
+   cover).  This form avoids making callers manufacture a separate prefix
+   witness: a recurrent linear bound on such members is already incompatible
+   with infinitude and zero density. -/
+theorem zeroDensity_not_recurrent_member_bound {A : NatSet}
+    (hA : Infinite A) (hD : ZeroDensity A) {C D : Nat}
+    (hbound : ∀ M : Nat, ∃ a : Nat,
+      M ≤ a ∧ A a ∧ a ≤ C * countPos A a + D) : False := by
+  apply zeroDensity_not_recurrent_linear_bound hA hD
+  intro M
+  obtain ⟨a, hMa, ha, hlin⟩ := hbound M
+  exact ⟨a, hMa, hlin⟩
+
 /- The standard “two boundary chains” of sums: first `x 0 + x k`, then
    `x (k-n+1) + x (n-1)`.  The two chains are separated by the middle gap. -/
 def boundarySum (x : Nat → Nat) (n k : Nat) : Nat :=
