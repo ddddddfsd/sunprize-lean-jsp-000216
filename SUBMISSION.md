@@ -43,6 +43,8 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 - value-unbounded positive truncation counts for every infinite set;
 - a zero-density contradiction for any recurrent linear endpoint bound
   `N ≤ C * countPos A N + D`;
+- the corresponding member-endpoint form, for structural arguments that
+  return a recurrent bound at actual elements of `A`;
 - the `GapSparseThreeApprox` witness interface and its implication to
   `DiscreteThreeApprox`;
 - the catalogue-shaped target interface `DiscreteErdos245`;
