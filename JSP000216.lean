@@ -490,6 +490,26 @@ theorem zeroDensity_not_recurrent_member_bound {A : NatSet}
   obtain ⟨a, hMa, ha, hlin⟩ := hbound M
   exact ⟨a, hMa, hlin⟩
 
+/- This packages the exact numerical transfer needed after applying a finite
+   `3k - 4` theorem to a normalized prefix.  The structural input is the
+   endpoint estimate `N ≤ |F+F| - |F| + 1`; once it recurs at arbitrarily
+   large cutoffs together with `|F+F| ≤ 3|F| - 4`, the endpoint is bounded by
+   `2 * |F| + 1`, contradicting zero density.  The remaining work in the
+   full Erdős theorem is to construct these normalized prefixes and prove
+   the structural endpoint estimate for them. -/
+theorem zeroDensity_not_recurrent_small_sum_endpoint {A : NatSet}
+    (hA : Infinite A) (hD : ZeroDensity A)
+    (hbound : ∀ M : Nat, ∃ N : Nat,
+      M ≤ N ∧
+      0 < countPos A N ∧
+      countPos (SumSet A) N ≤ 3 * countPos A N - 4 ∧
+      N ≤ countPos (SumSet A) N - countPos A N + 1) : False := by
+  refine zeroDensity_not_recurrent_linear_bound (C := 2) (D := 1) hA hD ?_
+  intro M
+  obtain ⟨N, hMN, hpos, hsmall, hend⟩ := hbound M
+  refine ⟨N, hMN, ?_⟩
+  omega
+
 /- The standard “two boundary chains” of sums: first `x 0 + x k`, then
    `x (k-n+1) + x (n-1)`.  The two chains are separated by the middle gap. -/
 def boundarySum (x : Nat → Nat) (n k : Nat) : Nat :=

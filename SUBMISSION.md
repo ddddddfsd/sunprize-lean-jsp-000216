@@ -45,6 +45,9 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
   `N ≤ C * countPos A N + D`;
 - the corresponding member-endpoint form, for structural arguments that
   return a recurrent bound at actual elements of `A`;
+- the combined small-sumset endpoint contradiction: recurrent prefixes with
+  `|F+F| ≤ 3|F|−4` and endpoint length `|F+F|−|F|+1` are incompatible with
+  infinite zero density;
 - the `GapSparseThreeApprox` witness interface and its implication to
   `DiscreteThreeApprox`;
 - the catalogue-shaped target interface `DiscreteErdos245`;
