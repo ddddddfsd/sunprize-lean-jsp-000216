@@ -476,6 +476,33 @@ theorem zeroDensity_not_recurrent_linear_bound {A : NatSet}
     simpa [Nat.add_mul] using hineq
   omega
 
+/- The contradiction form is equivalent to an eventual lower bound.  This is
+   convenient when the finite argument supplies an upper bound only beyond a
+   chosen threshold: zero density forces every fixed linear endpoint bound to
+   fail at all sufficiently large cutoffs. -/
+theorem zeroDensity_eventually_exceeds_linear_bound {A : NatSet}
+    (hA : Infinite A) (hD : ZeroDensity A) {C D : Nat}
+    : ∃ M : Nat, ∀ N : Nat, M ≤ N →
+      C * countPos A N + D < N := by
+  classical
+  exact Classical.byContradiction (fun h => by
+    apply zeroDensity_not_recurrent_linear_bound hA hD
+    intro M
+    have hnot : ¬ (∀ N : Nat, M ≤ N → C * countPos A N + D < N) := by
+      intro hM
+      exact h ⟨M, hM⟩
+    obtain ⟨N, hN⟩ := Classical.not_forall.mp hnot
+    have hnotlt : ¬ N < M := by
+      intro hlt
+      apply hN
+      intro hMN
+      omega
+    have hMN : M ≤ N := Nat.le_of_not_gt hnotlt
+    have hnotlin : ¬ C * countPos A N + D < N := by
+      intro hlin
+      exact hN (by intro _; exact hlin)
+    exact ⟨N, hMN, Nat.le_of_not_gt hnotlin⟩)
+
 /- A finite structural argument often returns its endpoint as an actual
    element of the set (for example, the maximum of a normalized progression
    cover).  This form avoids making callers manufacture a separate prefix
