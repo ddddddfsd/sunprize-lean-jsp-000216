@@ -23,13 +23,14 @@ truncated witness automatically. A further counting lemma converts a strictly
 increasing list of positive witnesses bounded by `N` into a lower bound on
 `countPos`, yielding the explicit `2*n−1` sumset count at cutoff `2*N`.
 
-The exact catalogue statement still requires the real-valued `Set`/`Filter`/
-`EReal` formalisation and Freiman's analytic passage from finite sumset bounds
-to the `limsup` lower bound 3. The core file uses reciprocal-error
-approximations to 3 for its discrete interface; an exact integer inequality at
-infinitely many cutoffs would be stronger than a real limsup statement. The
-catalogue theorem is intentionally not represented by `sorry`, an `axiom`, or
-a weaker theorem with the same name.
+The exact catalogue statement requires the real-valued `Set`/`Filter`/`EReal`
+formalisation and Freiman's analytic passage from finite sumset bounds to the
+`limsup` lower bound 3. The core file uses reciprocal-error approximations to
+3 for its discrete interface. An axiom-assisted variant now exposes the two
+remaining steps explicitly as `freiman_3k4_inverse_external` and
+`freiman_zero_density_transfer_external`, and proves
+`discreteErdos245_external`; the target's axiom dependencies are intentional
+and documented.
 
 The core interface now also records the implication chain
 `DiscreteThreeExact → DiscreteThreeApprox → DiscreteTwo`; the second step is
@@ -39,8 +40,9 @@ The `mathlib/` subproject contains two independently checked bridges. `BridgeExa
 connects the reciprocal-error `SetApprox` interface to the exact `EReal`
 `atTop.limsup` conclusion, including eventual denominator positivity. `FreimanProgression.lean`
 proves the finite diameter-to-progression covering lemma. The finite `3k−4`
-inverse theorem and its infinite zero-density transfer are still open in this
-repository.
+inverse theorem is also exposed there as the explicit external axiom
+`FreimanProgression.freiman_3k4_inverse_external`. The core file exposes the
+corresponding infinite transfer axiom separately.
 
 The same Mathlib file now checks the primitive diameter consequence used by a
 potential transfer: if a positive-step progression covers a finite set whose
@@ -63,9 +65,9 @@ set is still the unresolved transfer theorem.
 The current mathematical gap and the finite `3k−4` structural route are
 recorded in [`ANALYSIS-216.md`](ANALYSIS-216.md).
 
-The public submission metadata and the exact remaining gates are recorded in
-[`SUBMISSION.md`](SUBMISSION.md). It is a progress record, not a claim that
-the catalogued theorem has already been proved.
+The public submission metadata, axiom audit, and replacement gates are recorded
+in [`SUBMISSION.md`](SUBMISSION.md). This remains an assumption-carrying
+formal record rather than a kernel-only proof of the catalogued theorem.
 
 ## Reproducible build
 

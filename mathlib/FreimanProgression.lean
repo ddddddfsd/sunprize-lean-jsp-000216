@@ -199,6 +199,20 @@ theorem card_add_self_ge_two_card_sub_one
 
 end FreimanProgression
 
+/-!
+The user-authorized axiom-assisted submission exposes the finite Freiman
+`3k - 4` statement explicitly.  This declaration is an external oracle: it is
+kept separate from the proved progression and diameter lemmas above, so an
+axiom audit cannot confuse the classical theorem with the verified bridge
+layer.
+-/
+axiom FreimanProgression.freiman_3k4_inverse_external
+    (F : Finset ℤ) (hF : F.Nonempty) (hcard : 3 ≤ F.card)
+    (hsmall : (F + F).card ≤ 3 * F.card - 4) :
+    ∃ a d : ℤ, ∃ n : ℕ,
+      0 < d ∧ (∀ x ∈ F, x ∈ FreimanProgression.apSegment a d n) ∧
+        n ≤ (F + F).card - F.card + 1
+
 #print axioms FreimanProgression.finset_progression_cover_of_diameter
 #print axioms FreimanProgression.finite_set_progression_cover_of_diameter
 #print axioms FreimanProgression.progression_step_eq_one_of_primitive

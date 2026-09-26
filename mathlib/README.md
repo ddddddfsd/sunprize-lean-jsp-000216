@@ -17,9 +17,12 @@ core JSP-000216 development to the exact Formal Conjectures statement.
   `2 / ε - 1`. It also records the numerical diameter consequence of a
   primitive progression cover whose length is bounded by the sumset excess.
 
-All three files are free of `sorry`, `admit`, and custom axioms. These files do not
-claim the missing finite Freiman `3k-4` inverse theorem or its infinite
-zero-density transfer; those are the remaining mathematical steps.
+The proved lemmas in these files are free of `sorry` and `admit`. The finite
+Freiman `3k-4` inverse theorem is additionally exposed as the explicit axiom
+`FreimanProgression.freiman_3k4_inverse_external`; the core project exposes
+the infinite zero-density transfer as a separate named axiom. The resulting
+target is therefore assumption-carrying, and its axiom audit makes those two
+dependencies visible.
 
 From this directory, with Mathlib `v4.33.1` available:
 

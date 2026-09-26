@@ -60,7 +60,8 @@ The core file is [`JSP000216.lean`](JSP000216.lean), in namespace
 The `mathlib/` subproject adds a checked `Set`/`Filter`/`EReal` bridge from the
 reciprocal-error interface to the exact limsup conclusion, together with the
 finite diameter-to-progression covering lemma. It does not include the finite
-Freiman `3k−4` inverse theorem or the infinite zero-density transfer.
+Freiman `3k−4` inverse theorem or a proved infinite zero-density transfer;
+the finite theorem is exposed as a separately audited external axiom.
 It also checks the primitive consequence that any positive-step cover of a
 finite set with trivial common difference divisor has unit step and therefore
 length at least the endpoint diameter.
@@ -71,10 +72,11 @@ integer small-doubling bound: if the doubling is at most `2 - ε` with
 `0 < ε ≤ 1`, then `F.card ≤ 2 / ε - 1`. These are verified finite-side
 lemmas; they do not supply the missing `3k−4` inverse theorem.
 
-`DiscreteErdos245` is currently a definition, not a proved theorem. The
-Mathlib bridge for the reciprocal-error interface is checked in `mathlib/`,
-but the finite-to-infinite theorem that supplies its hypothesis has not yet
-been formalized.
+The axiom-assisted entry now proves `discreteErdos245_external` from two
+explicit external assumptions: `freiman_3k4_inverse_external` for the finite
+inverse theorem and `freiman_zero_density_transfer_external` for the infinite
+scale transfer. These assumptions are intentionally visible in the axiom
+audit; the result is not a kernel-only proof of the historical theorem.
 
 ## Reproduction
 
@@ -95,23 +97,18 @@ by the pinned toolchain.
 
 ## Trust and audit status
 
-The current core layer contains no `sorry`, `admit`, or custom axioms. It is a
-finite/interface layer and does not establish the original theorem. A final
-catalog submission will require a clean build at a fixed commit, a complete
-statement-to-proof correspondence, and an axiom audit for the fully qualified
-target theorem. The newly added core lemmas were audited with `#print axioms`;
-their dependency set is the standard Lean kernel set
-`[propext, Classical.choice, Quot.sound]` and contains no `sorryAx`.
+The proved bridge lemmas contain no `sorry` or `admit` and audit to the
+standard Lean kernel set `[propext, Classical.choice, Quot.sound]`. The
+axiom-assisted target additionally depends on the two explicitly named
+external assumptions above. It is therefore suitable as an assumption-
+carrying formal record, not as a kernel-only award proof.
 
 ## Outstanding work
 
 The following items are required before this becomes an award submission:
 
-1. Formalize the finite Freiman structural theorem or provide a complete
-   independently checkable proof dependency.
-2. Prove the infinite transfer from the finite structure to the zero-density
-   limsup bound for every admissible `A`.
-3. Formalize the finite `3k−4` inverse theorem and the infinite transfer from
-   zero density to the reciprocal-error interface.
-4. Re-run the complete audit on the exact public commit and then prepare a
-   catalog-only PR following the award repository's template.
+1. Replace `freiman_3k4_inverse_external` with a kernel-checked finite proof.
+2. Replace `freiman_zero_density_transfer_external` with a kernel-checked
+   infinite transfer proof.
+3. Re-run the complete audit on the exact public commit after removing the
+   external assumptions.

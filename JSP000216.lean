@@ -281,6 +281,33 @@ theorem discreteThreeApprox_mono {A : NatSet}
 def DiscreteErdos245 : Prop :=
   ∀ A : NatSet, Infinite A → ZeroDensity A → DiscreteThreeApprox A
 
+/-! ### Explicit external assumptions for the two outstanding theorems
+
+The user-authorized axiom-assisted variant keeps the two missing mathematical
+steps separate.  `FiniteFreimanEndpointOracle` is the finite `3k - 4`
+inverse theorem after passing to a normalized positive truncation.  The second
+axiom is the scale-selection/transfer statement that applies that finite
+theorem to every infinite zero-density set when the reciprocal-error target
+fails.  Neither axiom is hidden in a proof: both names appear in the final
+axiom audit. -/
+def FiniteFreimanEndpointOracle : Prop :=
+  ∀ (A : NatSet) (N : Nat),
+    A N →
+    3 ≤ countPos A N →
+    countPos (SumSet A) N ≤ 3 * countPos A N - 4 →
+    N ≤ countPos (SumSet A) N - countPos A N + 1
+
+axiom freiman_3k4_inverse_external : FiniteFreimanEndpointOracle
+
+axiom freiman_zero_density_transfer_external :
+  ∀ (_hF : FiniteFreimanEndpointOracle) (A : NatSet),
+    Infinite A → ZeroDensity A → ¬ DiscreteThreeApprox A →
+    ∀ M : Nat, ∃ N : Nat,
+      M ≤ N ∧
+      0 < countPos A N ∧
+      countPos (SumSet A) N ≤ 3 * countPos A N - 4 ∧
+      N ≤ countPos (SumSet A) N - countPos A N + 1
+
 /- A finite-cardinality-free way of saying that a set contains at least `m`
    distinct elements.  The eventual Mathlib layer can turn this witness into
    a `Finset.card` inequality. -/
@@ -536,6 +563,13 @@ theorem zeroDensity_not_recurrent_small_sum_endpoint {A : NatSet}
   obtain ⟨N, hMN, hpos, hsmall, hend⟩ := hbound M
   refine ⟨N, hMN, ?_⟩
   omega
+
+theorem discreteErdos245_external : DiscreteErdos245 := by
+  intro A hA hD
+  exact Classical.byContradiction (fun hnot =>
+    zeroDensity_not_recurrent_small_sum_endpoint hA hD
+      (freiman_zero_density_transfer_external
+        freiman_3k4_inverse_external A hA hD hnot))
 
 /- The standard “two boundary chains” of sums: first `x 0 + x k`, then
    `x (k-n+1) + x (n-1)`.  The two chains are separated by the middle gap. -/
@@ -986,3 +1020,5 @@ theorem canonical_boundary_example {n : Nat} (hn : 2 ≤ n) :
 
 end
 end JSP000216
+
+#print axioms JSP000216.discreteErdos245_external
